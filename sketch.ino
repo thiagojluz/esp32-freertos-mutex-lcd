@@ -77,9 +77,9 @@ void TaskSlider(void* pvParameters) {
   if ( xSemaphoreTake( Semaforo, ( TickType_t ) 5 ) == pdTRUE )  {
     lcd.setCursor(0, 0);
     lcd.print("Potenc.:");
+    xSemaphoreGive( Semaforo ); // Agora libere a Porta Serial para outros
   }      
-  xSemaphoreGive( Semaforo ); // Agora libere a Porta Serial para outros
-
+  
   for(;;){
     
       // leia a entrada analógica no pino A0
@@ -94,8 +94,9 @@ void TaskSlider(void* pvParameters) {
         lcd.setCursor(8, 0);
         lcd.print(sensor);
         lcd.print("% ");
+        xSemaphoreGive( Semaforo ); // Agora libere a Porta Serial para outros
       }      
-      xSemaphoreGive( Semaforo ); // Agora libere a Porta Serial para outros
+      
       vTaskDelay(500/portTICK_PERIOD_MS); // Bloqueio da Task por 500ms
   }
 }
@@ -109,8 +110,9 @@ void TaskTemp(void* pvParameters) {
   if ( xSemaphoreTake( Semaforo, ( TickType_t ) 5 ) == pdTRUE )  {
     lcd.setCursor(0, 1);
     lcd.print("Temp.:");
+    xSemaphoreGive( Semaforo ); // Agora libere a Porta Serial para outros
    }      
-  xSemaphoreGive( Semaforo ); // Agora libere a Porta Serial para outros
+  
 
   int sensor;
 
@@ -127,8 +129,9 @@ void TaskTemp(void* pvParameters) {
         lcd.print(String(data.temperature, 2));
         lcd.write(0xDF); // Símbolo de grau
         lcd.print("C");
+        xSemaphoreGive( Semaforo ); // Agora libere a Porta Serial para outros
     }      
-    xSemaphoreGive( Semaforo ); // Agora libere a Porta Serial para outros
+    
     vTaskDelay(500/portTICK_PERIOD_MS); // Bloqueio da Task por 500ms
   }
 }
